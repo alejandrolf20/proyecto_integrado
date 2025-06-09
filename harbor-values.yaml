@@ -1,0 +1,30 @@
+expose:
+  type: ingress
+  tls:
+    enabled: true
+    certSource: auto
+  ingress:
+    hosts:
+      core: harbor.local
+    annotations:
+      kubernetes.io/ingress.class: nginx
+
+externalURL: https://harbor.local
+
+harborAdminPassword: "admin"
+
+persistence:
+  enabled: true
+  persistentVolumeClaim:
+    registry:
+      size: 5Gi
+    jobservice:
+      size: 1Gi
+    chartmuseum:
+      size: 1Gi
+    trivy:
+      size: 1Gi
+
+trivy:
+  enabled: true
+
