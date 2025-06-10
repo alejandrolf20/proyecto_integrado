@@ -1,0 +1,19 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8srequiredregistry
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sRequiredRegistry
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8srequiredregistry
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          not startswith(container.image, input.parameters.registry)
+          msg := sprintf("La imagen '%s' no proviene del registro permitido '%s'", [container.image, input.parameters.registry])
+        }
